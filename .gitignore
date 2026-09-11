@@ -1,0 +1,15 @@
+# Python (not actually required by this project — see README — but kept
+# here in case a local dev server or tooling script gets added later)
+.venv/
+__pycache__/
+*.pyc
+
+# Node / JS tooling, in case a bundler or test runner gets added later
+node_modules/
+dist/
+*.log
+
+# OS / editor cruft
+.DS_Store
+.idea/
+.vscode/
