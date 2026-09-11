@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Torch &amp; Rat — backend test harness</title>
+<link rel="stylesheet" href="style.css" />
+<!-- Real Python execution for the bug-fixing mini-game. If this fails to
+     load (e.g. no internet in this sandbox), pyRunner.js degrades to a
+     much weaker heuristic check automatically. -->
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js"></script>
+</head>
+<body>
+
+<header class="topbar">
+  <h1>Torch &amp; Rat <span class="subtitle">— backend test harness</span></h1>
+  <div id="levelSelect" class="level-select">
+    <button data-level="easy">Easy</button>
+    <button data-level="medium">Medium</button>
+    <button data-level="hard">Hard</button>
+  </div>
+</header>
+
+<main class="layout">
+  <div class="stage-wrap">
+    <canvas id="stage"></canvas>
+    <div id="overlayBanner" class="overlay-banner hidden"></div>
+  </div>
+
+  <aside class="hud">
+    <section class="hud-block">
+      <h2>Score</h2>
+      <div class="hud-row"><span>Points</span><strong id="hudPoints">0</strong></div>
+      <div class="hud-row"><span>Rat</span><strong id="hudRatStatus">alive</strong></div>
+      <div class="hud-row"><span>Powerup</span><strong id="hudPowerup">none</strong></div>
+    </section>
+
+    <section class="hud-block">
+      <h2>Player</h2>
+      <div class="hud-row"><span>Status</span><strong id="hudPlayerStatus">active</strong></div>
+    </section>
+
+    <section class="hud-block">
+      <h2>Fires</h2>
+      <ul id="hudFireList" class="fire-list"></ul>
+    </section>
+
+    <section class="hud-block help">
+      <h2>Controls</h2>
+      <p>WASD / Arrows — move</p>
+      <p>Space — swing torch</p>
+      <p>E — fight nearest fire</p>
+      <p>Esc — pause task, keep chasing</p>
+    </section>
+  </aside>
+</main>
+
+<div id="taskModal" class="modal hidden">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h2 id="taskTitle">Fix the bug</h2>
+      <span id="taskDegradedBadge" class="badge hidden">offline fallback mode</span>
+    </div>
+    <p id="taskDescription" class="task-description"></p>
+    <textarea id="taskCode" spellcheck="false"></textarea>
+    <div class="task-actions">
+      <button id="taskRunBtn">Run tests</button>
+      <button id="taskHintBtn" class="secondary">Show hint</button>
+      <button id="taskPauseBtn" class="secondary">Pause &amp; keep chasing</button>
+    </div>
+    <p id="taskHint" class="task-hint hidden"></p>
+    <div id="taskResults" class="task-results"></div>
+  </div>
+</div>
+
+<script type="module" src="main.js"></script>
+</body>
+</html>
