@@ -1,49 +1,59 @@
 import React from 'react';
 import { useGameStore } from '../../store/gameStore';
+import { useSessionStore } from '../../store/sessionStore';
+import { getFireTiles } from '../../game-engine/fireSystem';
 import { GAME_WIDTH, GAME_HEIGHT } from '../../data/houseMapHitboxes';
-import Fire1 from '../../assets/icons/in-game/fire/Level1.svg?react';
-import Fire2 from '../../assets/icons/in-game/fire/Level2.svg?react';
-import Fire3 from '../../assets/icons/in-game/fire/Level3.svg?react';
-import Fire4 from '../../assets/icons/in-game/fire/Level4.svg?react';
-import Fire5 from '../../assets/icons/in-game/fire/Level5.svg?react';
-import Fire6 from '../../assets/icons/in-game/fire/Level6.svg?react';
-import Fire7 from '../../assets/icons/in-game/fire/Level7.svg?react';
-
-const FireIcons = [null, Fire1, Fire2, Fire3, Fire4, Fire5, Fire6, Fire7];
+import { NaturalFire } from './NaturalFire';
 
 export const FireOverlay: React.FC = () => {
   const fireLevel = useGameStore((state) => state.fireLevel);
   const firePos = useGameStore((state) => state.firePos);
+  const setStatus = useSessionStore((state) => state.setStatus);
+  const tiles = getFireTiles();
 
-  if (fireLevel === 0 || !firePos) return null;
+  if (fireLevel === 0 && tiles.length === 0) return null;
 
-  const opacity = (fireLevel / 7) * 0.5;
-  const ActiveFireIcon = FireIcons[fireLevel];
+  // Ambient house glow intensity
+  const opacity = Math.min(0.4, (fireLevel / 7) * 0.4);
+
+  const handleFireClick = () => {
+    // Open BugTask Modal window to solve Python bug and extinguish fire
+    setStatus('BUG_FIXING');
+  };
 
   return (
     <>
+      {/* Ambient house heat overlay */}
       <div 
         className="absolute inset-0 pointer-events-none transition-opacity duration-1000 z-10"
         style={{
-          backgroundColor: 'rgba(255, 100, 0, 1)',
+          backgroundColor: 'rgba(239, 68, 68, 1)',
           opacity: opacity,
-          mixBlendMode: 'overlay',
+          mixBlendMode: 'color-dodge',
         }}
       />
-      {ActiveFireIcon && (
-        <div 
-          className="absolute z-10 pointer-events-none"
-          style={{
-            left: `${(firePos.x / GAME_WIDTH) * 100}%`,
-            top: `${(firePos.y / GAME_HEIGHT) * 100}%`,
-            width: '128px',
-            height: '128px',
-            marginLeft: '-64px',
-            marginTop: '-64px',
-          }}
-        >
-          <ActiveFireIcon className="w-full h-full object-contain animate-pulse text-yellow-400 drop-shadow-[0_0_15px_rgba(250,204,21,0.8)]" />
-        </div>
+
+      {/* Render natural flickering fires on the floor */}
+      {tiles.length > 0 ? (
+        tiles.map((tile) => (
+          <NaturalFire
+            key={tile.id}
+            x={(tile.x / GAME_WIDTH) * 100}
+            y={(tile.y / GAME_HEIGHT) * 100}
+            intensity={tile.intensity}
+            onClick={handleFireClick}
+          />
+        ))
+      ) : (
+        // Fallback for single fire position
+        firePos && (
+          <NaturalFire
+            x={(firePos.x / GAME_WIDTH) * 100}
+            y={(firePos.y / GAME_HEIGHT) * 100}
+            intensity={1}
+            onClick={handleFireClick}
+          />
+        )
       )}
     </>
   );
