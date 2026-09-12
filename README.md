@@ -50,15 +50,15 @@ For Software:
 # Screenshots (Add at least 3)
 ![Screenshot1]<img width="1906" height="910" alt="Screenshot 2026-09-12 112058" src="https://github.com/user-attachments/assets/71ba1387-659b-4fa8-94ec-a28beb73e999" />
 
-
+the image shows the player starting the game with the rat and player with a torch present.
 
 ![Screenshot2]<img width="1899" height="909" alt="Screenshot 2026-09-12 112122" src="https://github.com/user-attachments/assets/2398e493-43fb-4d29-8e19-52bbe279fef2" />
 
-*Add caption explaining what this shows*
+the player loses consciousness for a short period when colliding with any obstacles.
 
 ![Screenshot3]<img width="1907" height="911" alt="Screenshot 2026-09-12 112140" src="https://github.com/user-attachments/assets/ed52f8ca-0dee-4755-9833-50106af5ad87" />
 
-*Add caption explaining what this shows*
+in order to extinguish the fire, the player is forced to solve a bug in a random code. 
 
 # Diagrams
 ![Workflow](Add your workflow/architecture diagram here)
@@ -85,8 +85,8 @@ For Hardware:
 
 ### Project Demo
 # Video
-[Add your demo video link here]
-*Explain what the video demonstrates*
+(https://drive.google.com/drive/folders/1KgMyHGGwI9heK9gTHF-JDCFnXjUn47-r?usp=sharing)
+the video demonstrates the gameplay. with the character following the rat, the rat escaping the player, the player collapsing, and the player debugging after lighting the house on fire. 
 
 # Additional Demos
 [Add any extra demo materials/links]
