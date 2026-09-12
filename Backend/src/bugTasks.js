@@ -68,116 +68,116 @@ export const BUG_TASKS = {
       ],
     },
     {
-    id: 'easy_multiply_list',
-    title: 'Multiply Everything',
-    functionName: 'multiply_list',
-    description: 'multiply_list(nums) should return the product of all numbers in the list. Right now it always returns 0.',
-    buggyCode:
-      'def multiply_list(nums):\n' +
-      '    result = 0\n' +
-      '    for n in nums:\n' +
-      '        result = result * n\n' +
-      '    return result\n',
-    hint: 'What happens when you multiply any number by 0? Check your starting value.',
-    testCases: [
-      { input: [[2, 3, 4]], expected: 24 },
-      { input: [[1, 5, 2]], expected: 10 },
-      { input: [[-2, 3]], expected: -6 },
-      { input: [[10]], expected: 10 },
-    ],
-  },
-  {
-    id: 'easy_count_vowels',
-    title: 'Count the Vowels',
-    functionName: 'count_vowels',
-    description: 'count_vowels(text) should return the total number of lowercase a, e, i, o, and u characters in the string.',
-    buggyCode:
-      'def count_vowels(text):\n' +
-      '    count = 0\n' +
-      '    for char in text:\n' +
-      '        if char == "a" or "e" or "i" or "o" or "u":\n' +
-      '            count += 1\n' +
-      '    return count\n',
-    hint: 'An "or" condition evaluates each part independently. "e" by itself is considered truthy.',
-    testCases: [
-      { input: ['apple'], expected: 2 },
-      { input: ['rhythm'], expected: 0 },
-      { input: ['beautiful'], expected: 5 },
-      { input: ['abcde'], expected: 2 },
-    ],
-  },
-  {
-    id: 'easy_reverse_string',
-    title: 'Reverse it',
-    functionName: 'reverse_string',
-    description: 'reverse_string(s) should return the string spelled backwards.',
-    buggyCode:
-      'def reverse_string(s):\n' +
-      '    return s.reverse()\n',
-    hint: 'Strings in Python do not have a .reverse() method like lists do. Try using string slicing [::-1].',
-    testCases: [
-      { input: ['cat'], expected: 'tac' },
-      { input: ['hello'], expected: 'olleh' },
-      { input: ['a'], expected: 'a' },
-      { input: [''], expected: '' },
-    ],
-  },
-  {
-    id: 'easy_c_to_f',
-    title: 'Celsius to Fahrenheit',
-    functionName: 'c_to_f',
-    description: 'c_to_f(celsius) should convert the temperature to Fahrenheit using the formula F = C * (9/5) + 32.',
-    buggyCode:
-      'def c_to_f(celsius):\n' +
-      '    return celsius * (9 / 5 + 32)\n',
-    hint: 'Check your parentheses. Are you adding 32 to the fraction before multiplying by Celsius?',
-    testCases: [
-      { input: [0], expected: 32 },
-      { input: [100], expected: 212 },
-      { input: [-40], expected: -40 },
-      { input: [10], expected: 50 },
-    ],
-  },
-  {
-    id: 'easy_keep_positives',
-    title: 'Only Positives',
-    functionName: 'keep_positives',
-    description: 'keep_positives(nums) should return a new list containing only the numbers strictly greater than zero.',
-    buggyCode:
-      'def keep_positives(nums):\n' +
-      '    result = []\n' +
-      '    for n in nums:\n' +
-      '        if n > 0:\n' +
-      '            result.append(nums)\n' +
-      '    return result\n',
-    hint: 'Look closely at what variable you are appending to the result list.',
-    testCases: [
-      { input: [[1, -2, 3]], expected: [1, 3] },
-      { input: [[-1, -5, 0]], expected: [] },
-      { input: [[4, 5]], expected: [4, 5] },
-      { input: [[-10, 10]], expected: [10] },
-    ],
-  },
-  {
-    id: 'easy_list_length',
-    title: 'Manual Length',
-    functionName: 'list_length',
-    description: 'list_length(items) should count how many items are in the list without using the built-in len() function.',
-    buggyCode:
-      'def list_length(items):\n' +
-      '    count = 0\n' +
-      '    for i in range(items):\n' +
-      '        count += 1\n' +
-      '    return count\n',
-    hint: 'The range() function expects an integer, but "items" is a list. How do you loop through elements directly?',
-    testCases: [
-      { input: [[1, 2, 3]], expected: 3 },
-      { input: [['a', 'b']], expected: 2 },
-      { input: [[]], expected: 0 },
-      { input: [[42, 42, 42, 42]], expected: 4 },
-    ],
-  }
-],
+      id: 'easy_multiply_list',
+      title: 'Multiply Everything',
+      functionName: 'multiply_list',
+      description: 'multiply_list(nums) should return the product of all numbers in the list. Right now it always returns 0.',
+      buggyCode:
+        'def multiply_list(nums):\n' +
+        '    result = 0\n' +
+        '    for n in nums:\n' +
+        '        result = result * n\n' +
+        '    return result\n',
+      hint: 'What happens when you multiply any number by 0? Check your starting value.',
+      testCases: [
+        { input: [[2, 3, 4]], expected: 24 },
+        { input: [[1, 5, 2]], expected: 10 },
+        { input: [[-2, 3]], expected: -6 },
+        { input: [[10]], expected: 10 },
+      ],
+    },
+    {
+      id: 'easy_count_vowels',
+      title: 'Count the Vowels',
+      functionName: 'count_vowels',
+      description: 'count_vowels(text) should return the total number of lowercase a, e, i, o, and u characters in the string.',
+      buggyCode:
+        'def count_vowels(text):\n' +
+        '    count = 0\n' +
+        '    for char in text:\n' +
+        '        if char == "a" or "e" or "i" or "o" or "u":\n' +
+        '            count += 1\n' +
+        '    return count\n',
+      hint: 'An "or" condition evaluates each part independently. "e" by itself is considered truthy.',
+      testCases: [
+        { input: ['apple'], expected: 2 },
+        { input: ['rhythm'], expected: 0 },
+        { input: ['beautiful'], expected: 5 },
+        { input: ['abcde'], expected: 2 },
+      ],
+    },
+    {
+      id: 'easy_reverse_string',
+      title: 'Reverse it',
+      functionName: 'reverse_string',
+      description: 'reverse_string(s) should return the string spelled backwards.',
+      buggyCode:
+        'def reverse_string(s):\n' +
+        '    return s.reverse()\n',
+      hint: 'Strings in Python do not have a .reverse() method like lists do. Try using string slicing [::-1].',
+      testCases: [
+        { input: ['cat'], expected: 'tac' },
+        { input: ['hello'], expected: 'olleh' },
+        { input: ['a'], expected: 'a' },
+        { input: [''], expected: '' },
+      ],
+    },
+    {
+      id: 'easy_c_to_f',
+      title: 'Celsius to Fahrenheit',
+      functionName: 'c_to_f',
+      description: 'c_to_f(celsius) should convert the temperature to Fahrenheit using the formula F = C * (9/5) + 32.',
+      buggyCode:
+        'def c_to_f(celsius):\n' +
+        '    return celsius * (9 / 5 + 32)\n',
+      hint: 'Check your parentheses. Are you adding 32 to the fraction before multiplying by Celsius?',
+      testCases: [
+        { input: [0], expected: 32 },
+        { input: [100], expected: 212 },
+        { input: [-40], expected: -40 },
+        { input: [10], expected: 50 },
+      ],
+    },
+    {
+      id: 'easy_keep_positives',
+      title: 'Only Positives',
+      functionName: 'keep_positives',
+      description: 'keep_positives(nums) should return a new list containing only the numbers strictly greater than zero.',
+      buggyCode:
+        'def keep_positives(nums):\n' +
+        '    result = []\n' +
+        '    for n in nums:\n' +
+        '        if n > 0:\n' +
+        '            result.append(nums)\n' +
+        '    return result\n',
+      hint: 'Look closely at what variable you are appending to the result list.',
+      testCases: [
+        { input: [[1, -2, 3]], expected: [1, 3] },
+        { input: [[-1, -5, 0]], expected: [] },
+        { input: [[4, 5]], expected: [4, 5] },
+        { input: [[-10, 10]], expected: [10] },
+      ],
+    },
+    {
+      id: 'easy_list_length',
+      title: 'Manual Length',
+      functionName: 'list_length',
+      description: 'list_length(items) should count how many items are in the list without using the built-in len() function.',
+      buggyCode:
+        'def list_length(items):\n' +
+        '    count = 0\n' +
+        '    for i in range(items):\n' +
+        '        count += 1\n' +
+        '    return count\n',
+      hint: 'The range() function expects an integer, but "items" is a list. How do you loop through elements directly?',
+      testCases: [
+        { input: [[1, 2, 3]], expected: 3 },
+        { input: [['a', 'b']], expected: 2 },
+        { input: [[]], expected: 0 },
+        { input: [[42, 42, 42, 42]], expected: 4 },
+      ],
+    },
+  ],
 
   medium: [
     {
