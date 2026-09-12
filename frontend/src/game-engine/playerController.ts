@@ -2,14 +2,13 @@ import { useGameStore } from '../store/gameStore';
 import { useSessionStore } from '../store/sessionStore';
 import { keys } from '../hooks/useKeyboardControls';
 import { checkCollisions, handleCollisionStun } from './collisionSystem';
-import { triggerFire, extinguishFire } from './fireSystem';
-import { GAME_WIDTH, GAME_HEIGHT } from '../data/houseMapHitboxes';
+import { triggerFire, getFireTiles } from './fireSystem';
 
 const PLAYER_BASE_SPEED = 4.5;
 const SPRINT_MULTIPLIER = 1.6;
 const SLAP_COOLDOWN_MS = 500;
 const SLAP_RANGE = 80;         // in game-space units (1440×1024)
-const FIRE_EXTINGUISH_RANGE = 120;
+const FIRE_INTERACT_RANGE = 160;
 
 // Interior playable bounds (inside house walls)
 const PLAYER_BOUNDS = { minX: 100, maxX: 1340, minY: 100, maxY: 960 };
@@ -18,46 +17,42 @@ let lastSlapTime = 0;
 
 export const updatePlayer = (deltaTime: number) => {
   const store = useGameStore.getState();
-  if (store.isStunned) return;
+  if (store.isStunned) return; // unconscious — no movement
 
-  // ── SLAP / INTERACT ───────────────────────────────────────────────────────
+  // ── SLAP / INTERACT / EXTINGUISH ─────────────────────────────────────────
   if (keys[' '] && Date.now() - lastSlapTime > SLAP_COOLDOWN_MS) {
     lastSlapTime = Date.now();
+    store.triggerSlap(); // Trigger GSAP torch swing hit animation
     
     const player = store.playerPos;
 
-    // Check if there's a fire and player is close to it — extinguish
-    if (store.fireLevel > 0 && store.firePos) {
-      const fireDist = Math.hypot(player.x - store.firePos.x, player.y - store.firePos.y);
-      if (fireDist < FIRE_EXTINGUISH_RANGE) {
-        extinguishFire();
+    // First priority: If fire is active and player is near fire tile, open BugTask window to extinguish fire!
+    if (store.fireLevel > 0) {
+      const tiles = getFireTiles();
+      const nearFire = tiles.some(t => Math.hypot(t.x - player.x, t.y - player.y) < FIRE_INTERACT_RANGE);
+      if (nearFire || tiles.length > 0) {
+        // Open BugTask window to extinguish fire
+        useSessionStore.getState().setStatus('BUG_FIXING');
         return;
       }
     }
     
-    // Check if rat is in slap range
+    // Check if rat is alive and in slap range
     const rat = store.ratPos;
     const dist = Math.hypot(player.x - rat.x, player.y - rat.y);
     
-    if (dist < SLAP_RANGE) {
-      // Hit!
+    if (store.ratState !== 'dead' && dist < SLAP_RANGE) {
+      // ── HIT! Rat dies ──────────────────────────────────────────────────
       store.addScore(100);
+      store.setRatState('dead');
       
-      if (store.score >= 1000) {
+      if (store.score + 100 >= 1000) {
         import('./gameLoop').then(({ stopGameLoop }) => stopGameLoop());
         useSessionStore.getState().setStatus('GAME_WON');
-      } else {
-        // Teleport rat to a new random interior location
-        store.setRatPos({
-          x: 150 + Math.random() * (GAME_WIDTH - 300),
-          y: 150 + Math.random() * (GAME_HEIGHT - 300)
-        });
       }
     } else {
-      // Miss! Trigger fire if none active
-      if (store.fireLevel === 0) {
-        triggerFire();
-      }
+      // Miss! Torch swipe creates a small fire on the tile where player missed
+      triggerFire(player.x, player.y);
     }
   }
 
@@ -114,7 +109,18 @@ export const updatePlayer = (deltaTime: number) => {
       hitY = true;
     }
     
-    if ((hitX || hitY) && isSprinting) {
+    if (hitX || hitY) {
+      // Bounce player BACK 22px so they're clear of the wall when they wake up
+      const BOUNCE = 22;
+      const bounceX = store.playerPos.x - dx * BOUNCE;
+      const bounceY = store.playerPos.y - dy * BOUNCE;
+      const safeX = Math.max(PLAYER_BOUNDS.minX, Math.min(PLAYER_BOUNDS.maxX, bounceX));
+      const safeY = Math.max(PLAYER_BOUNDS.minY, Math.min(PLAYER_BOUNDS.maxY, bounceY));
+      // Only apply bounce if that position is clear
+      if (!checkCollisions(safeX, safeY)) {
+        store.setPlayerPos({ x: safeX, y: safeY });
+      }
+      // Stun (unconscious for 4 sec)
       handleCollisionStun();
     } else {
       store.setPlayerPos({ x: newX, y: newY });

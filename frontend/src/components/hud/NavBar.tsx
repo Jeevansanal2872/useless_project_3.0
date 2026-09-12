@@ -79,7 +79,7 @@ export const NavBar: React.FC = () => {
         </button>
 
         <button 
-          onClick={triggerFire}
+          onClick={() => triggerFire()}
           className="w-16 h-16 bg-yellow-400 rounded-full border-4 border-yellow-200 shadow hover:scale-105 transition-transform flex items-center justify-center p-2"
         >
           <ActiveFireIcon className="w-full h-full object-contain" />
