@@ -2,6 +2,7 @@ import { houseMapHitboxes, type Rect } from '../data/houseMapHitboxes';
 import { useSessionStore } from '../store/sessionStore';
 import { useGameStore } from '../store/gameStore';
 
+<<<<<<< HEAD
 // Player collision circle radius — kept small so player isn't trapped
 const PLAYER_SIZE = 18;
 
@@ -15,6 +16,11 @@ const STUN_DURATION_MS = 4000;
 // Cooldown between stuns so a single bump doesn't re-stun immediately after waking
 const STUN_COOLDOWN_MS = 500;
 let lastStunEnd = 0;
+=======
+// Player hitbox is a square centered on playerPos
+const PLAYER_SIZE = 56;
+const STUN_DURATION_MS = 30;
+>>>>>>> 29427f2028c4d466e39d5ac60a023755e88ae9a3
 
 /**
  * Check if a point (representing the player center) collides with any wall/furniture hitbox.
