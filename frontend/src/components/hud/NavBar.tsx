@@ -1,3 +1,4 @@
+import React from 'react';
 import Fire0 from '../../assets/icons/in-game/fire/Level0.svg?react';
 import Fire1 from '../../assets/icons/in-game/fire/Level1.svg?react';
 import Fire2 from '../../assets/icons/in-game/fire/Level2.svg?react';
