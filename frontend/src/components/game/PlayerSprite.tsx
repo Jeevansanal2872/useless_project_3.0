@@ -9,20 +9,22 @@ import SprintingSprite from '../../assets/icons/in-game/Character/sprinting.svg?
 import UnconsciousSprite from '../../assets/icons/in-game/Character/Unconsious.svg?react';
 import TiredSprite from '../../assets/icons/in-game/Character/Tired.svg?react';
 
-// Sprinting.svg is a sideways-facing sprite — perfect for left/right movement
-// We flip it horizontally using scaleX for leftward movement
+// Key fix: GSAP controls the *outer* div's position (left/top).
+// The *inner* div handles transform (scaleX) for mirroring.
+// This prevents React re-renders from interfering with GSAP animations.
 
 export const PlayerSprite: React.FC = () => {
   const { playerPos, playerDirection, isSprinting, isStunned, isTired } = useGameStore();
-  const spriteRef = useRef<HTMLDivElement>(null);
+  const posRef = useRef<HTMLDivElement>(null); // GSAP animates this
 
   useEffect(() => {
-    if (spriteRef.current) {
-      gsap.to(spriteRef.current, {
+    if (posRef.current) {
+      gsap.to(posRef.current, {
         left: `${(playerPos.x / GAME_WIDTH) * 100}%`,
         top: `${(playerPos.y / GAME_HEIGHT) * 100}%`,
         duration: 0.08,
-        ease: 'power1.out'
+        ease: 'power1.out',
+        overwrite: 'auto',
       });
     }
   }, [playerPos]);
@@ -31,52 +33,61 @@ export const PlayerSprite: React.FC = () => {
   let scaleX = 1;
 
   if (isStunned) {
-    // Unconscious sprite — no direction matters
     SpriteComponent = UnconsciousSprite;
   } else if (isTired) {
     SpriteComponent = TiredSprite;
   } else if (isSprinting) {
-    // Sprint animation: use Up-1 for up, sprinting for left/right/down
     if (playerDirection === 'Up') {
       SpriteComponent = Up1Sprite;
     } else if (playerDirection === 'Left') {
       SpriteComponent = SprintingSprite;
-      scaleX = -1; // mirror for left
+      scaleX = -1;
     } else {
+      // Right or Down while sprinting
       SpriteComponent = SprintingSprite;
     }
   } else {
-    // Normal walking animations
+    // Normal walking
     if (playerDirection === 'Up') {
       SpriteComponent = UpSprite;
     } else if (playerDirection === 'Down') {
       SpriteComponent = DownSprite;
     } else if (playerDirection === 'Left') {
-      // Use sprinting sprite sideways (mirrored) for left walk
       SpriteComponent = SprintingSprite;
       scaleX = -1;
     } else if (playerDirection === 'Right') {
-      // Use sprinting sprite sideways for right walk
       SpriteComponent = SprintingSprite;
     }
   }
 
   return (
-    <div 
-      ref={spriteRef}
+    // Outer div: GSAP animates left/top — keep style here minimal so GSAP owns it
+    <div
+      ref={posRef}
       className="absolute z-20"
       style={{
-        width: '56px',
-        height: '56px',
-        marginLeft: '-28px',
-        marginTop: '-28px',
         left: `${(playerPos.x / GAME_WIDTH) * 100}%`,
         top: `${(playerPos.y / GAME_HEIGHT) * 100}%`,
-        transform: `scaleX(${scaleX})`,
-        filter: isStunned ? 'drop-shadow(0 0 8px rgba(255,0,0,0.8))' : undefined,
+        width: 0,
+        height: 0,
+        // Offset the sprite so it's centered on the position point
       }}
     >
-      <SpriteComponent className="w-full h-full object-contain" />
+      {/* Inner div: React controls transform (scaleX mirror) — GSAP does NOT touch this */}
+      <div
+        style={{
+          position: 'absolute',
+          width: '56px',
+          height: '56px',
+          marginLeft: '-28px',
+          marginTop: '-28px',
+          transform: `scaleX(${scaleX})`,
+          transition: 'transform 0.1s ease',
+          filter: isStunned ? 'drop-shadow(0 0 8px rgba(255,0,0,0.8))' : undefined,
+        }}
+      >
+        <SpriteComponent className="w-full h-full object-contain" />
+      </div>
     </div>
   );
 };
