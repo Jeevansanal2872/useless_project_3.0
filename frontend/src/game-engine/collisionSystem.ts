@@ -3,8 +3,8 @@ import { useSessionStore } from '../store/sessionStore';
 import { useGameStore } from '../store/gameStore';
 
 // Player hitbox is a square centered on playerPos
-const PLAYER_SIZE = 28;
-const STUN_DURATION_MS = 2500;
+const PLAYER_SIZE = 56;
+const STUN_DURATION_MS = 30;
 
 /**
  * Check if a point (representing the player center) collides with any wall/furniture hitbox.
